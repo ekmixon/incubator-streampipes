@@ -65,19 +65,13 @@ export class StartAdapterConfigurationComponent implements OnInit {
 
   startAdapterSettingsFormValid = false;
 
-
-  // preprocessing rule variables
-  removeDuplicates = false;
-  removeDuplicatesTime: number;
-
-  eventRateReduction = false;
-  eventRateTime: number;
-  eventRateMode = 'none';
-
   saveInDataLake = false;
   dataLakeTimestampField: string;
 
   isSetAdapter = false;
+
+  private duplicateRule: RemoveDuplicatesTransformationRuleDescription;
+  private eventRateReductionRule: EventRateTransformationRuleDescription;
 
 
   constructor(
@@ -98,19 +92,30 @@ export class StartAdapterConfigurationComponent implements OnInit {
     }
 
   }
-  public triggerDialog(storeAsTemplate: boolean) {
-    if (this.removeDuplicates) {
-      const removeDuplicates: RemoveDuplicatesTransformationRuleDescription = new RemoveDuplicatesTransformationRuleDescription();
-      removeDuplicates['@class'] = 'org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription';
-      removeDuplicates.filterTimeWindow = (this.removeDuplicatesTime) as any;
-      this.adapterDescription.rules.push(removeDuplicates);
+
+  setDuplicateRule(rule) {
+    this.duplicateRule = rule;
+  }
+
+  setEventRateReductionRule(rule) {
+    this.eventRateReductionRule = rule;
+  }
+
+  public saveTemplate() {
+    this.triggerDialog(true);
+  }
+
+  public startAdapter() {
+    this.triggerDialog(false);
+  }
+
+  private triggerDialog(storeAsTemplate: boolean) {
+    if (this.duplicateRule) {
+      this.adapterDescription.rules.push(this.duplicateRule);
     }
-    if (this.eventRateReduction) {
-      const eventRate: EventRateTransformationRuleDescription = new EventRateTransformationRuleDescription();
-      eventRate['@class'] = 'org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription';
-      eventRate.aggregationTimeWindow = this.eventRateMode as any;
-      eventRate.aggregationType = this.eventRateMode;
-      this.adapterDescription.rules.push(eventRate);
+
+    if (this.eventRateReductionRule) {
+      this.adapterDescription.rules.push(this.eventRateReductionRule);
     }
 
     const dialogRef = this.dialogService.open(AdapterStartedDialog, {
@@ -132,18 +137,16 @@ export class StartAdapterConfigurationComponent implements OnInit {
     });
   }
 
-  public saveTemplate() {
-    this.triggerDialog(true);
-  }
-
-  public startAdapter() {
-    this.triggerDialog(false);
-  }
-
+  /**
+   * Cancel the adapter configuration process
+   */
   public removeSelection() {
     this.removeSelectionEmitter.emit();
   }
 
+  /**
+   * Go one step back in the adapter configuration process
+   */
   public goBack() {
     this.goBackEmitter.emit();
   }

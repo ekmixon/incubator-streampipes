@@ -63,6 +63,6 @@ module.exports = function (config) {
         browserNoActivityTimeout: 50000,
         colors: true,
         logLevel: config.LOG_INFO,
-        browsers: ['ChromeHeadless', 'FirefoxHeadless']
+        browsers: ['ChromeHeadless']
     });
 };

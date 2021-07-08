@@ -1,0 +1,25 @@
+
+<div [formGroup]="eventReductionRuleForm" fxLayoutAlign="center" fxLayout="column" fxFlex="100">
+    <mat-checkbox formControlName="eventRateReduction"
+                  matTooltip="Send maximum one event in the specified time window">Reduce the event rate
+    </mat-checkbox>
+    <mat-form-field *ngIf="showEventRateReductionInput">
+        <input matInput
+               id="input-evenRateTime"
+               placeholder="Time Window (Milliseconds)"
+               matTooltipPosition="above"
+               formControlName="eventRateTime">
+        <mat-error *ngIf="!eventRateTimeValid">
+            {{errorMessage}}
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="showEventRateReductionInput">
+        <mat-label>Event Aggregation</mat-label>
+        <mat-select formControlName="eventRateMode">
+            <mat-option class="md-elevation-z1" style="background: white;"
+                        matTooltip="Last Event in Time Window" value="none">
+                None
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

@@ -123,6 +123,9 @@ export class FormatConfigurationComponent implements OnInit {
     this.clickNextEmitter.emit();
   }
 
+  /**
+   * Go one step back in the adapter configuration process
+   */
   public goBack() {
     this.goBackEmitter.emit();
   }
